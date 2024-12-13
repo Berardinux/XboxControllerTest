@@ -7,30 +7,44 @@ X = 511
 current_value = 32768
 exit_program = False
 DEAD_ZONE = 1023
-device_path = '/dev/input/event25'
+device_path = '/dev/input/event24'
+
+x_lock_positive = False
+x_lock_negative = False
+
+def set_x_locks(lock_positive, lock_negative):
+    global x_lock_positive, x_lock_negative
+    x_lock_positive = lock_positive
+    x_lock_negative = lock_negative
 
 def update_x():
-    global X, current_value, exit_program
-    last_x = X
+    global X, current_value, exit_program, x_lock_positive, x_lock_negative
     while not exit_program:
         if abs(current_value - 32768) > DEAD_ZONE:
+            delta = 0
             if current_value > 42768:
                 if current_value > 60535:
-                    X -= 8
+                    delta = -8
                 elif current_value > 51652:
-                    X -= 4
+                    delta = -4
                 else:
-                    X -= 1
+                    delta = -1
             elif current_value < 22768:
                 if current_value < 5000:
-                    X += 8
+                    delta = 8
                 elif current_value < 13883:
-                    X += 4
+                    delta = 4
                 else:
-                    X += 1
+                    delta = 1
+
+            if delta > 0 and x_lock_positive:
+                delta = 0
+            if delta < 0 and x_lock_negative:
+                delta = 0
+
+            X += delta
 
         X = max(0, min(X, 1023))
-        last_x = X
         sleep(0.05)
 
 def get_x_value():
@@ -38,7 +52,6 @@ def get_x_value():
     return round(x_coordinates)
 
 def start_x_updates():
-    """Call this from main.py to start reading device input and updating X."""
     global exit_program, current_value
     device = evdev.InputDevice(device_path)
     print(device)

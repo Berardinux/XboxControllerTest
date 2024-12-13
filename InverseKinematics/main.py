@@ -1,7 +1,8 @@
 import threading
 from time import sleep
-from X_Scaler import get_x_value, start_x_updates
-from Y_Scaler import get_y_value, start_y_updates
+from X_Scaler import get_x_value, start_x_updates, set_x_locks
+from Y_Scaler import get_y_value, start_y_updates, set_y_locks
+from InverseKinematics import moveToPos, SHOULDER_LENGTH, ELBOW_LENGTH
 
 exit_program = False
 
@@ -13,14 +14,30 @@ def main():
         y_update_thread = threading.Thread(target=start_y_updates, daemon=True)
         x_update_thread.start()
         y_update_thread.start()
+
+        max_reach = SHOULDER_LENGTH + ELBOW_LENGTH
+
         while not exit_program:
             x_val = get_x_value()
             y_val = get_y_value()
-            last_x = x_val
-            last_y = y_val
-            print(f"(X: {x_val}, Y: {y_val})")
-            last_x = x_val
-            last_y = y_val
+            shoulder_angle, elbow_angle = moveToPos(x_val, y_val)
+
+            out_of_range = (shoulder_angle is None or elbow_angle is None)
+
+            radius = (x_val**2 + y_val**2)**0.5
+
+            if out_of_range and radius > max_reach:
+                x_lock_positive = (x_val > 0)
+                x_lock_negative = (x_val < 0)
+                y_lock_positive = (y_val > 0)
+                y_lock_negative = (y_val < 0)
+                set_x_locks(x_lock_positive, x_lock_negative)
+                set_y_locks(y_lock_positive, y_lock_negative)
+            else:
+                set_x_locks(False, False)
+                set_y_locks(False, False)
+
+            print(f"(X: {x_val}, Y: {y_val}) // Shoulder angle: {shoulder_angle} // Elbow angle: {elbow_angle}")
             sleep(0.01)
 
     except KeyboardInterrupt:
