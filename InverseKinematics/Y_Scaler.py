@@ -3,11 +3,11 @@ from time import sleep
 import threading
 import numpy as np
 
-Y = 511
+Y = 250
 current_value = 32768
 exit_program = False
 DEAD_ZONE = 1023
-device_path = '/dev/input/event24'
+device_path = '/dev/input/event4'
 
 y_lock_positive = False
 y_lock_negative = False

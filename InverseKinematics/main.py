@@ -7,6 +7,7 @@ from InverseKinematics import moveToPos, SHOULDER_LENGTH, ELBOW_LENGTH
 SHOULDER_PIN = 21
 ELBOW_PIN = 20
 exit_program = False
+pi = pigpio.pi()
 
 def main():
     global exit_program
@@ -39,8 +40,8 @@ def main():
                 set_x_locks(False, False)
                 set_y_locks(False, False)
 
-            pigpio.pi.set_servo_pulsewidth(SHOULDER_PIN, shoulder_pwm)
-            pigpio.pi.set_servo_pulsewidth(ELBOW_PIN, elbow_pwm)
+            pi.set_servo_pulsewidth(SHOULDER_PIN, shoulder_pwm)
+            pi.set_servo_pulsewidth(ELBOW_PIN, elbow_pwm)
             print(f"(X: {x_val}, Y: {y_val}) // Shoulder angle: {shoulder_angle} // Elbow angle: {elbow_angle} // SPW {shoulder_pwm} // EPW {elbow_pwm}")
             sleep(0.01)
 

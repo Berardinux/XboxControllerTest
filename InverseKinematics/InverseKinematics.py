@@ -18,13 +18,13 @@ def moveToPos(x, y):
     #θ4 = θ3*2
     θ4 = 180 - θ3
     θ5 = 180 - θ4
-    an2 = -1 * (90 - θ5)
+    an2 = (90 - θ5)
 
     if (an1 <= 180) and (an1 >= 0):
-        spw = np.interp(an1, [0, 180], [1598, 500])
+        spw = np.interp(an1, [0, 180], [500, 1598])
 
     if (an2 <= 180) & (an1 >= 0):
-        epw = np.interp(an2, [0, 180], [1880, 720])
+        epw = np.interp(an2, [0, 180], [720, 1880])
           
 
     return an1, an2, epw, spw
