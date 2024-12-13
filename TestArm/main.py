@@ -26,7 +26,7 @@ def update_shoulder():
         try:
             shoulder_value = get_shoulder_value()  
             # Debugging print (optional)
-            print(f"Shoulder Value: {shoulder_value:.2f} /\\ Elbow Value: {elbow_value:.2f}")  
+            #print(f"Shoulder Value: {shoulder_value:.2f} /\\ Elbow Value: {elbow_value:.2f}")  
         except Exception as e:
             print(f"Error fetching shoulder value: {e}")
         sleep(0.05)

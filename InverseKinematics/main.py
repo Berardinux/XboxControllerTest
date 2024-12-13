@@ -1,9 +1,11 @@
 import threading
+import pigpio
 from time import sleep
 from X_Scaler import get_x_value, start_x_updates, set_x_locks
 from Y_Scaler import get_y_value, start_y_updates, set_y_locks
 from InverseKinematics import moveToPos, SHOULDER_LENGTH, ELBOW_LENGTH
-
+SHOULDER_PIN = 21
+ELBOW_PIN = 20
 exit_program = False
 
 def main():
@@ -20,7 +22,7 @@ def main():
         while not exit_program:
             x_val = get_x_value()
             y_val = get_y_value()
-            shoulder_angle, elbow_angle = moveToPos(x_val, y_val)
+            shoulder_angle, elbow_angle, shoulder_pwm, elbow_pwm= moveToPos(x_val, y_val)
 
             out_of_range = (shoulder_angle is None or elbow_angle is None)
 
@@ -37,7 +39,9 @@ def main():
                 set_x_locks(False, False)
                 set_y_locks(False, False)
 
-            print(f"(X: {x_val}, Y: {y_val}) // Shoulder angle: {shoulder_angle} // Elbow angle: {elbow_angle}")
+            pigpio.pi.set_servo_pulsewidth(SHOULDER_PIN, shoulder_pwm)
+            pigpio.pi.set_servo_pulsewidth(ELBOW_PIN, elbow_pwm)
+            print(f"(X: {x_val}, Y: {y_val}) // Shoulder angle: {shoulder_angle} // Elbow angle: {elbow_angle} // SPW {shoulder_pwm} // EPW {elbow_pwm}")
             sleep(0.01)
 
     except KeyboardInterrupt:
