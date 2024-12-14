@@ -7,7 +7,7 @@ X = 250
 current_value = 32768
 exit_program = False
 DEAD_ZONE = 1023
-device_path = '/dev/input/event4'
+device_path = '/dev/input/event25'
 
 x_lock_positive = False
 x_lock_negative = False
