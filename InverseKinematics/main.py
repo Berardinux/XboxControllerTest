@@ -20,6 +20,8 @@ def main():
         y_update_thread.start()
 
         max_reach = SHOULDER_LENGTH + ELBOW_LENGTH
+        old_shoulder_pwm = 1200
+        old_elbow_pwm = 1200
 
         while not exit_program:
             x_val = get_x_value()

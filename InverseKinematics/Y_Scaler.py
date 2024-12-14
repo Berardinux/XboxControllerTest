@@ -3,7 +3,7 @@ from time import sleep
 import threading
 import numpy as np
 
-Y = 250
+Y = 583
 current_value = 32768
 exit_program = False
 DEAD_ZONE = 1023

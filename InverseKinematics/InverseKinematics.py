@@ -16,7 +16,7 @@ def moveToPos(x, y):
     θ1 = round(math.degrees(math.asin(y/h1)))
     θ2 = math.degrees(math.acos((h1/2)/SHOULDER_LENGTH))
     an1 = θ1 + θ2
-    θ3 = math.degrees(math.asin((h1/2)/SHOULDER_LENGTH)
+    θ3 = math.degrees(math.asin((h1/2)/SHOULDER_LENGTH))
     #θ3 = 90 - θ2
     θ4 = θ3 * 2
     θ5 = 180 - θ4
